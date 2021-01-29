@@ -1,57 +1,67 @@
 <template>
 	<div class="about">
-		<h3>简单的计数器</h3>
-		<div>
-			<button @click="reduce">-</button>
-			<span>{{num}}</span>
-			<button @click="add">+</button>
-		</div>
-		<div>
-			<h2>事件发生情况</h2>
-			<h3><span>普通方法执行了:{{normal()}}</span></h3>
-			<br>
-			<h3><span>关联方法执行了:{{comput1}}</span></h3>
-			<br>
-			<h3><span>关联中的不关联:{{comput2}}</span></h3>
-			<br>
-			<h3><span>监听事件:{{num}}</span></h3>
-		</div>
+		<Heart :stateprop='heartState' @tellparent='statechange'><span slot='to'>给商品点赞</span></Heart>
+		<br>
+		<Heart :stateprop='heart1State' @tellparent='state1change'><span slot='to'>给客服点赞</span></Heart>
+		<br>
+		<Heart :stateprop='heart2State' @tellparent='state1change'><span slot='to'>给价格点赞</span></Heart>
+		<br>
+		<br>
+		<br>
+		<Star :starprop='start1' @tellparent='star1change' ><span slot='to'>给商品评星</span></Star>
+		<br>
+		<Star :starprop='start2' @tellparent='star2change' ><span slot='to'>给客服评星</span></Star>
+		<br>
+		<Star :starprop='start3' @tellparent='star3change' ><span slot='to'>给价格评星</span></Star>
+		<br>
+		<br>
+		<br>
+		<br>
+		<span v-if="show"><Step></Step></span>
+		<br>
+		<button @click="show=!show">切换</button>
 	</div>
 </template>
 <script>
+	import Heart from '@/components/heart/Heart.vue'
+	import Star from '@/components/star/Star.vue'
+	import Step from '@/components/Step.vue'
 	export default {
-	data(){
-		return{
-			num:0
-		}
+	components: {
+		Heart,
+		Star,
+		Step,
 	},
 	methods:{
-		reduce(){
-			this.num--;
+		statechange(e){
+			console.log('通知服务器将商品点赞状态设置为',e.state);
 		},
-		add(){
-			this.num++;
+		state1change(e){
+			console.log('通知服务器将客服点赞状态设置为',e.state);
 		},
-		normal(){
-			console.log('普通方法执行了');
-			return '普通方法'
-		}
+		state2change(e){
+			console.log('通知服务器将价格点赞状态设置为',e.state);
+		},
+		star1change(e){
+			console.log('通知服务器将商品的评星设置为',e.starnum)
+		},
+		star2change(e){
+			console.log('通知服务器将客服的评星设置为',e.starnum)
+		},
+		star3change(e){
+			console.log('通知服务器将价格的评星设置为',e.starnum)
+		},
 	},
-	computed:{
-		comput1(){
-			console.log('关联方法执行了');
-			return '关联方法'+this.num
-		},
-		comput2(){
-			console.log('关联方法中的不关联');
-			return '关联中的不关联'
-		}
-	},
-	watch:{
-		num(newValue,oldValue){
-			console.log('监听num事件',newValue,oldValue);
+	data(){
+		return{
+			heartState:true,
+			heart1State:true,
+			heart2State:true,
+			start1:1,
+			start2:1,
+			start3:1,
+			show:true,
 		}
 	}
-	
 	}
 </script>
